@@ -881,3 +881,246 @@ Esse é o motivo pelo qual o state é frequentemente movido para cima na árvore
 
 <h2 align="center"><strong>SEÇÃO 3:</strong> PROFUNDO NO REACT</h2>
 
+
+## JSX
+
+JSX é uma tecnologia que foi introduzida pelo React.
+
+Embora o React possa funcionar completamente sem o uso do JSX, é uma tecnologia ideal para trabalhar com componentes, portanto, o React se beneficia muito com o JSX.
+
+No começo, você pode pensar que usar JSX é como misturar HTML e JavaScript (e como você verá, CSS).
+
+Mas isso não é verdade, porque o que você realmente está fazendo ao usar a sintaxe JSX é escrever uma sintaxe declarativa do que um componente da UI deve ser.
+
+E você não está descrevendo essa interface do usuário usando seqüências de caracteres, e sim usando JavaScript, o que permite fazer muitas coisas legais.
+
+### Um iniciador JSX
+
+Aqui está como você define uma tag h1 que contém uma string:
+```
+const element = <h1> Olá, mundo! </h1>
+```
+Parece uma estranha mistura de JavaScript e HTML, mas, na realidade, é tudo JavaScript.
+
+O que parece HTML, na verdade, é um 'açúcar sintático' para definir componentes e seu posicionamento dentro da marcação.
+
+Dentro de uma expressão JSX, os atributos podem ser inseridos com muita facilidade:
+```
+const myId = 'test'
+const element = <h1 id={myId}>Hello, world!</h1>
+```
+
+Você só precisa prestar atenção quando um atributo tem um traço (-) que é convertido na sintaxe camelCase, e nesses 2 casos especiais:
+
+- class vira className
+- for vira htmlFor
+
+porque eles são palavras reservadas do JavaScript
+
+Aqui está um snippet JSX que agrupa dois componentes em uma div:
+
+```
+<div>
+  <BlogPostsList />
+  <Sidebar />
+</div>
+```
+
+Uma tag sempre precisa ser fechada, porque isso é mais XML que HTML (se você se lembrar dos dias XHTML, isso será familiar, mas desde então a sintaxe mínima do HTML5 ganhou). Nesse caso, uma tag de fechamento automático é usada.
+
+Observe como eu agrupei os 2 componentes em uma div. Por quê? Como a função render() pode retornar apenas um único nó, portanto, caso você queira retornar 2 irmãos, basta adicionar um pai. Pode ser qualquer tag, não apenas div.
+
+### Transpilando JSX
+
+Um navegador não pode executar arquivos JavaScript que contêm código JSX. Eles devem ser primeiro transformados em JS regular.
+
+Como? Ao fazer um processo chamado transpiling (algo como transpilação).
+
+Já dissemos que o JSX é opcional, porque para cada linha JSX, uma alternativa JavaScript simples correspondente está disponível, e é para isso que o JSX é transpilado.
+
+Por exemplo, as duas construções a seguir são equivalentes
+
+> Plain JS
+```
+ReactDOM.render(
+  React.DOM.div(
+    { id: 'test' },
+    React.DOM.h1(null, 'A title'),
+    React.DOM.p(null, 'A paragraph')
+  ),
+  document.getElementById('myapp')
+```
+
+> JSX 
+```
+ReactDOM.render(
+  <div id="test">
+    <h1>A title</h1>
+    <p>A paragraph</p>
+  </div>,
+  document.getElementById('myapp')
+)
+```
+Este exemplo é apenas o ponto de partida, mas você já pode ver quão mais complicada é a sintaxe do JavaScript comparada ao uso do JSX.
+
+No momento da digitação, a maneira mais popular de realizar a transpilação é usar o Babel, que é a opção padrão ao executar o create-react-app. Portanto, se você o usar, não precisará se preocupar, tudo acontece por baixo dos panos.
+
+Se você não usa o app create-react, precisa configurar o Babel por conta própria.
+
+### JS no JSX
+
+O JSX aceita misturar qualquer tipo de JavaScript.
+
+Sempre que você precisar adicionar algum JS, basta colocá-lo dentro de chaves {}. Por exemplo, veja como usar um valor definido em outro lugar:
+
+```
+const paragraph = 'A paragraph'
+ReactDOM.render(
+  <div id="test">
+    <h1>A title</h1>
+    <p>{paragraph}</p>
+  </div>,
+  document.getElementById('myapp')
+)
+```
+
+Esse é um exemplo simples. As chaves aceitam qualquer tipo de JS.
+```
+const paragraph = 'A paragraph'
+ReactDOM.render(
+  <table>
+    {rows.map((row, i) => {
+      return <tr>{row.text}</tr>
+    })}
+  </table>,
+  document.getElementById('myapp')
+)
+```
+Como você pode ver, nós colocamos JS dentro de um JSX definido dentro de um JS aninhado em um JS (hehe aqui o autor se passou). Você pode ir tão 'fundo' quanto precisa.
+
+### HTML no JSX
+
+JSX lembra HTML um monte, mas na verdade é uma sintaxe XML.
+
+No final, você renderiza HTML, portanto, é necessário conhecer algumas diferenças entre como você definiria algumas coisas em HTML e como você as define em JSX.
+
+### Você precisar fechar todas as tags
+
+Como no XHTML, se você ja utilizou ele alguma vez, você precisa fechar todas as tagas: sem mais `<br>`, ao  invés disso use a self-closing tag: `<br />`. O mesmo vale para outras tags.
+
+### camelCase é o novo padrão
+
+Em HTML, você encontrará atributos sem nenhum 'case' (por exemplo, onchange). No JSX, eles são renomeados para o equivalente em camelCase:
+
+- onchange => onChange
+- onclick => onClick
+- onsubmit => onSubmit
+
+### <kbg>class</kbg> vira <kbg>className</kbg>
+
+Devido ao fato de JSX ser JavaScript, e classe ser uma palavra reservada do JS, você não pode escrever:
+
+```
+<p class="description">
+
+```
+
+você precisa usar:
+
+```
+<p className="description">
+```
+
+O mesmo se aplica para o <kbg>for</kbg>, que é transformado em <kbg>htmlFor</kbg>.
+
+### CSS no React
+
+JSX fornece uma maneira muito legal de definir o CSS.
+
+Se você tem um pouco de experiência com estilos inline de HTML, à primeira vista, você volta 10 ou 15 anos para um mundo em que o inline CSS era completamente normal (hoje em dia é demonizado e geralmente é apenas uma “solução rápida”).
+
+O styles do não é a mesma coisa: primeiro, em vez de aceitar uma sequência contendo propriedades CSS, o atributo <kbg>style</kbg> do JSX aceita apenas um objeto. Isso significa que você define propriedades em um objeto:
+
+```
+var divStyle = {
+  color: 'white'
+}
+
+ReactDOM.render(<div style={divStyle}>Hello World!</div>, mountNode)
+```
+
+ou 
+
+```
+ReactDOM.render(<div style={{ color: 'white' }}>Hello World!</div>, mountNode)
+```
+
+Os valores CSS que você escreve em JSX são ligeiramente diferentes do CSS comun:
+
+- o nome da propriedade é escrito em camelCase
+- os valores são apenas strings
+- você separa cada propriedade com uma vírgula
+
+### Por que isso é preferível ao CSS / SASS / LESS?
+
+CSS é um problema não resolvido. Desde a sua criação, dezenas de ferramentas ao seu redor ascenderam e caíram. O principal problema com o JS é que não há escopo e é fácil escrever CSS que não é forçado; portanto, uma "solução rápida" pode afetar elementos que não devem ser tocados.
+
+O JSX permite que os componentes (definidos no React, por exemplo) encapsulem completamente seu estilo.
+
+### Essa é a solução ideal?
+
+Inline styles no JSX só são ótimos até que você precise:
+
+1. escrever medias queries
+2. fazer animações
+3. referenciar pseudo classes (como o :hover)
+4. referenciar pseudo elementos (como o ::first-letter)
+
+Em resumo, eles cobrem o básico, mas não são a solução final.
+
+### Formulários em JSX
+
+Com o objetivo de facilitar as coisas para o desenvolvedor, o JSX adiciona algumas mudanças na maneira como os formulários do HTML funcionam.
+
+### <kbg>value</kbg> e <kbg>defaultValue</kbg>
+
+O atributo <kbg>value</kbg> sempre armazena o valor atual de um campo.
+
+O <kbg>defaultValue</kbg> armazena o valor padrão que foi definido quando o campo foi criado.
+
+Isso ajuda a resolver alguns comportamentos estranhos da interação com a DOM ao inspecionar o input.value e o input.getAttribute('value'), retornando um o valor atual e outro o valor padrão original.
+
+O mesmo para <kbg>textarea</kbg>
+```
+<textarea> Algum texto </textarea>
+```
+
+que vira: 
+```
+<textarea defaultValue={'Algum texto'} />
+```
+
+### Para campos do tipo <kbg>select</kbg>
+
+Em vez de usar 
+
+```
+<select>
+  <option value="x" selected>
+    ...
+  </option>
+</select>
+```
+use 
+```
+<select defaultValue="x">
+  <option value="x">...</option>
+</select>
+```
+### Um onChage mais consistente
+
+Passando uma function para o atributo <kbg>onChange</kbg>, você pode definir eventos nos campo do formulário.
+
+Isso funciona tranquilamente em outros campos, até no <kbg>radio</kbg>,  <kbg>select</kbg> e  <kbg>checkbox</kbg>.
+
+O onChange também dispara quando um caracter é digitado dentro de um <kbg>textarea</kbg>
