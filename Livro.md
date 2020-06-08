@@ -17,7 +17,6 @@
 - Callbacks
 - Promises
 - Async/Await
-- ES Modules
 
 <strong>SEÇÃO 2:</strong> CONCEITOS DO REACT
 
@@ -472,5 +471,413 @@ A partir do ES6, o JavaScript introduziu vários recursos que nos ajudam com có
 - Promises (ES6)
 - Async/Await (ES8)
 
+## Promises
 
+Promises são uma maneira de lidar com o código assíncrono, sem escrever muitos retornos de chamada no seu código.
+
+Embora existam há anos, eles foram padronizados e introduzidos no ES2015 e agora foram substituídos no ES2017 por funções assíncronas (async functions).
+
+As funções assíncronas (async functions) usam a API das promises como seu componente básico, portanto, entendê-las é fundamental, mesmo que no código mais recente você provavelmente use funções assíncronas (async functions) em vez de promises.
+
+### Como as promises funcionam
+
+Uma vez que uma promise tenha sido chamada, ela começará no estado pendente. Isso significa que a função de chamada continua a execução, enquanto aguarda a promise fazer seu próprio processamento e fornece algum feedback à função de chamada.
+
+Nesse ponto, a função de chamada espera que ela retorne a promise em um estado resolvido ou em um estado rejeitado, mas como você sabe que o JavaScript é assíncrono, a função continua sua execução enquanto a promise funciona.
+
+### Qual API do JS usa promises?
+
+Além de seu próprio código e código de biblioteca, as promessas são usadas pelas APIs modernas padrão da Web, como Fetch ou Services Workers.
+
+É improvável que no JavaScript moderno você não use promises, então vamos começar a mergulhar nelas.
+
+### Criando uma promise
+
+A API Promise expõe um construtor Promise, que você inicializa usando <kbg>new Promise()</kbg>:
+```
+let done = true
+
+const isItDoneYet = new Promise((resolve, reject) => {
+  if (done) {
+    const workDone = 'Aqui é o que eu construí'
+    resolve(workDone)
+  } else {
+    const why = 'Continua funciocando em outra coisa'
+    reject(why)
+  }
+})
+```
+Como você pode ver, a promise verifica a constante global realizada e, se isso for verdade, retornamos uma promise resolvida, caso contrário, uma promise rejeitada.
+
+Usando <kbg>resolve</kbg> e <kbg>reject</kbg>, podemos comunicar um valor novamente; no caso acima, retornamos apenas uma string, mas também poderia ser um objeto.
+
+### Consumindo uma promise
+
+Na última seção, nós instroduzimos como uma promise é criada.
+
+Agora vamos ver como uma promise pode ser consumida ou usada.
+
+```
+const isItDoneYet = new Promise()
+//...
+
+const checkIfItsDone = () => {
+  isItDoneYet
+    .then(ok => {
+      console.log(ok)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}
+```
+
+## Async / Await
+
+O JavaScript evoluiu em um período muito curto, desde callbacks até promises (ES2015), e desde o ES2017, o JavaScript assíncrono é ainda mais simples com a sintaxe <kbg>async / await</kbg>.
+
+As async functions (funções assíncronas) são uma combinação de promises e geradores e, basicamente, são uma abstração de nível superior às promises. Deixe-me repetir: assíncrono / espera é construído sobre promises.
+
+### Por que o async/await foi introduzido?
+
+Eles reduzem o clichê em torno das promises e a limitação "não quebre a cadeia" do encadeamento de promises.
+
+Quando as promises foram introduzidas no ES2015, elas pretendiam solucionar um problema com código assíncrono, e fizeram isso, mas nos dois anos que separaram o ES2015 e o ES2017, ficou claro que as promises não poderiam ser a solução final.
+
+Promises foram introduzidas para resolver o famoso problema 'callback hell', mas introduziram complexidade por conta própria, além da complexidade de sintaxe.
+
+Eles eram boas primitivas em torno das quais uma sintaxe melhor poderia ser exposta aos desenvolvedores; portanto, quando chegou a hora certa, obtivemos as async functions (funções assíncronas).
+
+Eles fazem o código parecer síncrono, mas é assíncrono e sem bloqueio nos bastidores.
+
+### Como funciona
+
+Uma async function retorna uma promise, como no exemplo: 
+
+```
+const doSomethingAsync = () => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve('I did something'), 3000)
+  })
+}
+```
+
+Quando você deseja chamar essa função, você acrescenta <kbg>await</kbg>, e o código de chamada será interrompido até que a promise seja resolvida ou rejeitada. Uma ressalva: a função deve ser definida como assíncrona. Aqui está um exemplo:
+
+```
+const doSomething = async () => {
+  console.log(await doSomethingAsync())
+}
+```
+### Um rápido exemplo
+
+Esse é um exemplo simples de como um async/await roda uma função de forma assíncrona:
+
+```
+const doSomethingAsync = () => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve('Eu fiz algo'), 3000)
+  })
+}
+
+const doSomething = async () => {
+  console.log(await doSomethingAsync())
+}
+
+console.log('Antes')
+doSomething()
+console.log('Depois')
+```
+
+O código acima imprimirá o seguinte no console do navegador:
+
+```
+Antes
+Depois
+Eu fiz algo //depois de 3s
+```
+
+<h2 align="center"><strong>SEÇÃO 2:</strong> CONCEITOS DO REACT </h2>
+
+### Single Page Aplication (SPA)
+
+Aplicações em React também são chamadas de Single Page Aplications. Mas o que isso significa?
+
+No passado, quando os navegadores eram muito menos capazes do que hoje, e o desempenho do JavaScript era ruim, todas as páginas vinham de um servidor. Sempre que você clicava em algo, uma nova solicitação era feita ao servidor e o navegador carregava a nova página posteriormente.
+
+Somente produtos muito inovadores funcionaram de maneira diferente e experimentaram novas abordagens.
+
+Hoje, popularizado pelas modernas estruturas de front-end JavaScript, como o React, um aplicativo geralmente é criado como um aplicativo de página (single page aplication): você carrega o código do aplicativo (HTML, CSS, JavaScript) apenas uma vez e, quando você interage com o aplicativo, o que geralmente acontece é que JavaScript intercepta os eventos do navegador e, em vez de fazer uma nova solicitação ao servidor que retorna um novo documento, o cliente solicita algum JSON ou executa uma ação no servidor, mas a página que o usuário vê nunca é completamente apagada e se comporta mais como um aplicativo de desktop.
+
+Single page applications are built in JavaScript (or at least compiled to JavaScript) and work in the browser.
+
+Single page aplication são desenvolvidas em JavaScript (ou pelo menos compiladas para JavaScritp) e funcionam no browser.
+
+A tecnologia é sempre a mesma, mas a filosofia e alguns components chaves de como a aplicação funciona são diferentes.
+
+### Exemplos de Single Page Applications
+
+- Gmail
+- Google Maps
+- Facebook
+- Twitter
+- Google Drive
+
+### Prós e constras das SPA'S
+
+Uma SPA é muito mais rápido para o usuário, porque, em vez de esperar a comunicação cliente-servidor, e esperar que o navegador renderize novamente a página, agora você pode obter feedback instantâneo. Isso é de responsabilidade do fabricante do aplicativo, mas você pode ter transições e spinners e qualquer tipo de aprimoramento de UX que seja certamente melhor do que o fluxo de trabalho tradicional.
+
+Além de tornar a experiência mais rápida para o usuário, o servidor consumirá menos recursos, porque você pode se concentrar em fornecer uma API eficiente em vez de criar layouts do lado do servidor.
+
+Isso o torna ideal se você também criar um aplicativo móvel sobre a API, pois poderá reutilizar completamente o código existente do lado do servidor.
+
+As SPAs são fáceis de transformar em Progressive Web Apps, que, por sua vez, permitem fornecer armazenamento em cache local e oferecer suporte a experiências offline para seus serviços (ou simplesmente uma mensagem de erro melhor se seus usuários precisarem estar online).
+
+As SPAs são mais utilizados quando não há necessidade de SEO (otimização de mecanismos de busca). Por exemplo, para aplicativos que funcionam atrás de um login.
+
+Os mecanismos de pesquisa, embora melhorem a cada dia, ainda têm problemas para indexar sites criados com uma abordagem de SPA, em vez das páginas tradicionais renderizadas por servidor. Este é o caso dos blogs. Se você vai contar com os mecanismos de pesquisa, não se preocupe em criar um aplicativo de página única sem que um servidor também seja processado.
+
+Ao codificar um SPA, você escreverá bastante JavaScript. Como o aplicativo pode ser demorado, você precisará prestar muito mais atenção a possíveis vazamentos de memória - se no passado sua página tinha uma vida útil contada em minutos, agora uma SPA pode ficar aberto por horas a fio. 
+
+As SPAs são ótimos quando se trabalha em equipe. Os desenvolvedores de back-end podem se concentrar apenas na API, e os desenvolvedores de front-end podem se concentrar na criação da melhor experiência do usuário, fazendo uso da API criada no back-end.
+
+Por isso, os aplicativos de página única dependem muito do JavaScript. Isso pode tornar o uso de um aplicativo executado em dispositivos de baixa potência uma experiência ruim em termos de velocidade. Além disso, alguns de seus visitantes podem ter o JavaScript desativado e você também precisa considerar a acessibilidade para qualquer coisa que criar.
+
+### Substituindo a navegação
+
+Como você se livra da navegação padrão do navegador, os URLs devem ser gerenciados manualmente.
+
+Essa parte de um aplicativo é chamada de roteador. Algumas estruturas já cuidam delas para você (como o Ember), outras exigem bibliotecas que farão esse trabalho (como o React Router).
+
+Qual é o problema? No começo, isso era uma reflexão tardia para os desenvolvedores que criam SPAs. Isso causou o problema comum de "botão quebrado": ao navegar no aplicativo, o URL não foi alterado (desde que a navegação padrão do navegador foi invadida) e ao pressionar o botão voltar, uma operação comum que os usuários fazem para ir para a tela anterior, pode4iq mudar para um site que você visitou há muito tempo.
+
+Agora, esse problema pode ser resolvido usando a History API, oferecida pelos navegadores, mas na maioria das vezes você usa uma biblioteca que usa internamente essa API, como o React Router.
+
+## Declarativo
+
+O que significa quando você lê que React é declarativo? Você encontrará artigos que descrevem o React como uma abordagem declarativa para criar UIs.
+
+O React tornou sua "abordagem declarativa" bastante popular e aberta, permeando o mundo frontend junto com o React.
+
+Não é realmente um conceito novo, mas o React levou a criação de UIs muito mais declarativamente do que nos modelos HTML:
+
+- você pode criar interfaces Web sem sequer tocar diretamente no DOM
+- você pode ter um sistema de eventos sem precisar interagir com os eventos DOM reais.
+
+O oposto de declarativo é imperativo. Um exemplo comum de uma abordagem imperativa é procurar elementos na DOM usando eventos jQuery ou DOM. Você diz ao navegador exatamente o que fazer, em vez de dizer o que precisa.
+
+A abordagem declarativa React abstrai isso para nós. Apenas dizemos ao React que queremos que um componente seja renderizado de uma maneira específica e nunca precisamos interagir com a DOM para fazer referência a ele mais tarde.
+
+## Imutabilidade
+
+Um conceito que você provavelmente encontrará ao programar no React é a imutabilidade (e seu oposto, a mutabilidade).
+
+É um tópico polêmico, mas seja o que for que você pense sobre o conceito de imutabilidade, o React e a maior parte do seu ecossistema o força, então você precisa pelo menos ter uma idéia de por que é tão importante e suas implicações.
+
+Na programação, uma variável é imutável quando seu valor não pode ser alterado após a criação.
+
+Você já está usando variáveis imutáveis sem saber quando manipula uma string. As strings são imutáveis por padrão, quando você as altera na realidade, você cria uma nova string e a atribui ao mesmo nome de variável.
+
+Uma variável imutável nunca pode ser alterada. Para atualizar seu valor, você cria uma nova variável.
+
+O mesmo se aplica a objetos e matrizes.
+
+Em vez de alterar uma matriz, para adicionar um novo item, você cria uma nova matriz concatenando a matriz antiga e o novo item.
+
+Um objeto nunca é atualizado, mas copiado antes de alterá-lo.
+
+Isso se aplica ao React em muitos lugares.
+
+Por exemplo, você nunca deve alterar a propriedade state de um componente diretamente, mas apenas através do método setState().
+
+No Redux, você nunca muda o estado diretamente, mas apenas através de reducers, que são funções.
+
+A questão é, por quê?
+
+Existem várias razões, e as mais importantes são:
+
+- As mutações podem ser centralizadas, como no caso do Redux, o que melhora os recursos de debbuging e reduz as fontes de erros.
+- O código parece mais limpo e simples de entender. Você nunca espera que uma função altere algum valor sem que você saiba, o que lhe dá previsibilidade. Quando uma função não modifica objetos, mas apenas retorna um novo objeto, isso é chamado de função pura.
+- A biblioteca pode otimizar o código porque, por exemplo, o JavaScript é mais rápido ao trocar uma referência de objeto antigo por um objeto totalmente novo, em vez de alterar um objeto existente. Isso lhe dá desempenho.
+
+## Pureza
+
+No JavaScript, quando uma função não modifica objetos, mas apenas retorna um novo objeto, ela é chamada de função pura.
+
+Uma função ou método, para ser considero puro, não deve causar efeitos colaterais e deve retornar a mesma saída quando chamado várias vezes com a mesma entrada.
+
+Uma função pura recebe uma entrada e retorna uma saída sem alterar a entrada.
+
+Sua saída é determinada apenas pelos argumentos. Você poderia chamar essa função 1M vezes e, dado o mesmo conjunto de argumentos, a saída será sempre a mesma.
+
+React aplica esse conceito aos componentes. Um componente React é um componente puro quando sua saída depende apenas de suas props.
+
+Todos os componentes funcionais são componentes puros:
+```
+const Button = props => {
+  return <button>{props.message}</button>
+}
+```
+Os componentes de classe podem ser puros se sua saída depender apenas das props:
+
+```
+class Button extends React.Component {
+  render() {
+    return <button>{this.props.message}</button>
+  }
+}
+```
+
+## Composição
+
+Na programação, a composição permite criar funcionalidades mais complexas combinando funções pequenas e focadas.
+
+Por exemplo, pense em usar map () para criar uma nova matriz a partir de um conjunto inicial e, em seguida, filtrar o resultado usando filter ():
+
+``
+const lista = ['Maçã', 'Laranja', 'Ovo']
+lista.map (item => item [0]). filter (item => item === 'A') // 'A'
+``
+No React, a composição permite que você tenha algumas vantagens interessantes.
+
+Você cria componentes pequenos e os usa para compor mais funcionalidade sobre eles. Como?
+
+### Criando uma versão especializada de um componente
+
+Use um componente externo para expandir e especializar um componente mais genérico>
+
+```
+const Button = props => {
+  return <button>{props.text}</button>
+}
+
+const SubmitButton = () => {
+  return <Button text="Submit" />
+}
+
+const LoginButton = () => {
+  return <Button text="Login" />
+}
+```
+
+### Passando métodos como props
+
+Um componente pode se concentrar no rastreamento de um evento de clique, por exemplo, e o que realmente acontece quando o evento de clique ocorre depende do componente do contêiner:
+```
+const Button = props => {
+  return <button onClick={props.onClickHandler}>{props.text}</button>
+}
+
+const LoginButton = props => {
+  return <Button text="Login" onClickHandler={props.onClickHandler} />
+}
+
+const Container = () => {
+  const onClickHandler = () => {
+    alert('clicked')
+  }
+  
+  return <LoginButton onClickHandler={onClickHandler} />
+}
+```
+
+### Usando Children
+
+A propriedade <kbg>props.children</kbg> permite a você inserir componentes dentro de outros componentes.
+
+O componente precisa enviar props.children no seu JSX:
+```
+const Sidebar = props => {
+  return <aside>{props.children}</aside>
+}
+```
+
+e você incorpora mais componentes nele de maneira transparente:
+
+```
+<Sidebar>
+  <Link title="First link" />
+  <Link title="Second link" />
+</Sidebar>
+```
+
+### Componentes de ordem superior (high order components)
+
+Quando um componente recebe um componente como props e retorna um componente, isso é chamado de componente de ordem superior.
+
+Nós os veremos daqui a pouco.
+
+## Virtual DOM
+
+Muitos frameworks existentes, antes que o React aparecesse, manipulavam diretamente a DOM a cada alteração.
+
+Primeiro, o que é a DOM?
+
+A DOM (Document Object Model) é uma representação em árvore da página, iniciando na tag <html>, indo para todos os filhos, chamados de nós.
+
+Ela é mantido na memória do navegador e diretamente vinculada ao que você vê em uma página. A DOM possui uma API que você pode usar para atravessá-la, acessar todos os nós, filtrá-los e modificá-los.
+
+A API é a sintaxe familiar que você provavelmente já viu muitas vezes, se você não estava usando a API abstrata fornecida pelo jQuery e amigos:
+
+```
+document.getElementById(id)
+document.getElementsByTagName(name)
+document.createElement(name)
+parentNode.appendChild(node)
+element.innerHTML
+element.style.left
+element.setAttribute()
+element.getAttribute()
+element.addEventListener()
+window.content
+window.onload
+window.dump()
+window.scrollTo()
+```
+
+O React mantém uma cópia da representação da DOM, no que diz respeito à renderização do React: a virtual DOM
+
+
+### A virtual DOM explicada
+
+Sempre que a DOM é alterada, o navegador precisa realizar duas operações intensivas: repaint (alterações visuais ou de conteúdo em um elemento que não afeta o layout e o posicionamento em relação a outros elementos) e reflow (recalcular o layout de uma parte da página - ou o layout da página inteira).
+
+O React usa uma virtual DOM para ajudar o navegador a usar menos recursos quando alterações precisam ser feitas em uma página.
+
+Quando você chama setState() em um componente, especificando um state diferente do anterior, o React marca esse componente como sujo (dirty). Este é o ponto: o React apenas atualiza quando um componente altera o estado explicitamente.
+
+O que acontece a seguir é:
+
+- O React atualiza a virtual DOM em relação aos componentes marcados como sujos (com algumas verificações adicionais, como acionar shouldComponentUpdate ())
+- Executa o algoritmo diffing para reconciliar as alterações
+- Atualiza a DOM real
+
+## Fluxo de dados unidirecional
+
+Trabalhando com o React, você pode encontrar o termo Fluxo de dados unidirecional. O que isso significa? O fluxo de dados unidirecional não é um conceito exclusivo do React, mas como desenvolvedor JavaScript, pode ser a primeira vez que você o ouve.
+
+Em geral, esse conceito significa que os dados têm uma e apenas uma maneira de serem transferidos para outras partes do aplicativo.
+
+Em React, isso significa que:
+
+- state é passado para a view e para os componentes filhos
+- ações são acionadas pela view
+- ações podem atualizar o state
+- a mudança no state é passada para a view e para os componentes filhos
+
+A view é resultado do state do aplicativo. O state só pode mudar quando ações acontecem. Quando ações acontecem, o state é atualizado.
+
+Graças às ligações unidirecionais, os dados não podem fluir de maneira oposta (como aconteceria com as ligações bidirecionais, por exemplo), e isso tem algumas vantagens principais:
+
+- é menos propenso a erros, pois você tem mais controle sobre seus dados
+- é mais fácil de debugar, pois você sabe o que vem e de onde vem
+- é mais eficiente, pois a biblioteca já sabe quais são os limites de cada parte do sistema
+
+Um state sempre pertence a um componente. Quaisquer dados afetados por esse state podem afetar apenas os componentes abaixo dele: seus filhos.
+
+A alteração do state em um componente nunca afetará seus pais, irmãos ou qualquer outro componente no aplicativo: apenas seus filhos.
+
+Esse é o motivo pelo qual o state é frequentemente movido para cima na árvore de componentes, para que ele possa ser compartilhado entre os componentes que precisam acessá-lo.
+
+<h2 align="center"><strong>SEÇÃO 3:</strong> PROFUNDO NO REACT</h2>
 
