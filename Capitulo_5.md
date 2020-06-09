@@ -94,6 +94,129 @@ import './styles.scss'
 
 ## Styled Components
 
+Styled Components é uma das novas maneiras de usar o CSS no JavaScript moderno. Ele pretende ser um sucessor dos CSS Modules, e é outra maneira de escrever CSS com escopo definido para um único componente.
 
+### Uma curta história 
 
+Houve uma vez em que a Web era realmente simples e o CSS nem existia. Organizávamos as páginas usando tables e frames. Bons tempos.
 
+Então o CSS ganhou vida e, depois de algum tempo, ficou claro que os frameworks poderiam ajudar bastante, especialmente na criação de grids e layouts, o Bootstrap desempenhou um papel importante nisso.
+
+Pré-processadores como o SASS e outros ajudaram muito a desacelerar a adoção de frameworks e a organizar melhor o código. Convenções como o BEM e o SMACSS cresceram em uso, especialmente em equipes.
+
+As convenções não são uma solução para tudo, e são complexas de serem lembradas; portanto, nos últimos anos, com a crescente adoção do JavaScript e processos de construção em todos os projetos de front-end, o CSS encontrou seu caminho no JavaScript (CSS-in-JS).
+
+Novas ferramentas exploraram novas maneiras de executar CSS-in-JS e algumas tiveram sucesso com crescente popularidade:
+
+- React Style
+- jsxstyle
+- Radium
+
+e mais.
+
+### Introduzindo Styled Components
+
+Uma das ferramentas mais populares é o Styled Components.
+
+Ele pretende ser um sucessor do CSS Modules, uma maneira de escrever CSS com escopo definido para um único componente.
+
+Styled Components permite que você escreva CSS simples em seus componentes sem se preocupar com colisões de nomes de classes.
+
+#### Instalação
+
+Instale usando <kbg>npm</kbg> ou <kbg>yarn</kbg>:
+```
+npm install styled-components
+yarn add styled-components
+```
+
+É isso aí! Agora tudo que você precisa fazer é adicionar este import:
+```
+import styled from 'styled-components'
+```
+
+### Seu primeiro styled component
+
+Com o <kbg>styled</kbg> importado, agora você pode começar a criar Styled Components. Aqui está o primeiro:
+```
+const Button = styled.button`
+  font-size: 1.5em;
+  background-color: black;
+  color: white;
+```
+<kbg>Button</kbg> é agora um componente React.
+
+Nós criamos isso usando uma função do <kbg>styled</kbg>, chamando button nesse caso, e passando algumas propriedades do CSS em uma template literal.
+
+Agora esse componenente pode ser renderizado em nosso container usando a sintaxe normal do React:
+```
+render(<Button />)
+```
+
+Styled Components oferece outras funções que você pode usar para criar outros componentes, não apenas botões, mas também <kbg>section</kbg>, <kbg>h1</kbg>, <kbg>input</kbg> e muitos outros.
+
+A sintaxe usada com o backtick pode ser estranha no começo, mas é chamada de <kbg>Tagged templates</kbg> e é uma maneira de passar um argumento para a função.
+
+### Usando props para customizar um component 
+
+Quando você passa alguns objetos para um Styled Component, ele os passa para um nó da DOM.
+
+Por exemplo, aqui está como passamos as props do <kbg>placeholder</kbg> e do <kbg>type</kbg> para um componente de entrada:
+
+```
+const Input = styled.input`
+  //...
+`
+
+render(
+  <div>
+    <Input placeholder="..." type="text" />
+  </div>
+)
+```
+
+Isso fará exatamente o que você pensa, inserindo esses objetos como atributos HTML.
+
+As props, em vez de apenas serem transmitidas às cegas para a DOM, também podem ser usadas para personalizar um componente com base no seu valor. Aqui está um exemplo:
+
+```
+const Button = styled.button`
+  background: ${props => (props.primary ? 'black' : 'white')};
+  color: ${props => (props.primary ? 'white' : 'black')};
+`
+
+render(
+  <div>
+    <Button>A normal button</Button>
+    <Button>A normal button</Button>
+    <Button primary>The primary button</Button>
+  </div>
+)
+```
+
+### Extendendo um Styled Component
+
+Se você possui um componente e deseja criar um semelhante, com um estilo um pouco diferente, pode usar o extend:
+```
+const Button = styled.button`
+  color: black;
+  //...
+`
+
+const WhiteButton = Button.extend`
+  color: white;
+`
+
+render(
+  <div>
+    <Button>A black button, like all buttons</Button>
+    <WhiteButton>A white button</WhiteButton>
+  </div>
+)
+```
+
+### É CSS simples
+
+Em Styled Components você pode usar o CSS que você já conhece e ama. É só CSS simples. 
+
+Você pode usar media queries, aninhamento e qualquer outra coisa que possa precisar.
