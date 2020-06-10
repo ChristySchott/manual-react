@@ -369,3 +369,199 @@ test(`The mathjs log function`, () => {
   expect(mathjs.log).toHaveBeenCalledWith(10000, 10)
 })
 ```
+
+### Mock em um pacote inteiro
+
+O Jest fornece uma maneira conveniente de dar um mock em um pacote inteiro. Crie uma pasta `__mocks__` na raiz do projeto e, nessa pasta, crie um arquivo JavaScript para cada um dos seus pacotes.
+
+Digamos que você importe mathjs. Crie um arquivo `__mocks __/mathjs.js` na raiz do projeto e adicione este conteúdo:
+
+```
+module.exports = {
+  log: jest.fn(() => 'test')
+}
+```
+
+Isso vai dar um `mock` na função `log()` do pacote. Adicione quantas funções você desejar:
+```
+const mathjs = require('mathjs')
+
+test(`The mathjs log function`, () => {
+  const result = mathjs.log(10000, 10)
+  expect(result).toBe('test')
+  expect(mathjs.log).toHaveBeenCalled()
+  expect(mathjs.log).toHaveBeenCalledWith(10000, 10)
+})
+```
+
+### Mock em uma única função
+
+Mais simples, você pode fazer isso usando `jest.fn()`:
+```
+const mathjs = require('mathjs')
+
+mathjs.log = jest.fn(() => 'test')
+test(`The mathjs log function`, () => {
+  const result = mathjs.log(10000, 10)
+  expect(result).toBe('test')
+  expect(mathjs.log).toHaveBeenCalled()
+  expect(mathjs.log).toHaveBeenCalledWith(10000, 10)
+})
+```
+
+## Testing React Components
+
+A maneira mais fácil de começar com o teste de componentes do React é fazer o teste de instantâneo, uma técnica de teste que permite testar componentes isoladamente.
+
+Suponho que você criou um aplicativo React com o create-react-app, que já vem com o Jest instalado, o pacote de testes que precisamos.
+
+Vamos começar com um teste simples. O CodeSandbox é um ótimo ambiente para experimentar isso. Comece com uma React sandbox, crie um componente `App.js` em uma pasta de componentes e adicione um arquivo `App.test.js`.
+
+```
+import React from 'react'
+
+export default function App() {
+  return (
+    <div className="App">
+      <h1>Hello CodeSandbox</h1>
+      <h2>Start editing to see some magic happen!</h2>
+    </div>
+  )
+}
+```
+
+Nosso primeiro teste é bem simples:
+
+```
+test('First test', () => {
+  expect(true).toBeTruthy()
+})
+```
+
+Quando o CodeSandbox detecta arquivos de teste, ele os executa automaticamente e você pode clicar no botão Testes na parte inferior da exibição para mostrar os resultados do teste:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/DKFPyZSWF0O2ldKLAMyz7i0Di9NLqMs-ChQ4" alt="Test"/></h1>
+
+Um arquivo de teste pode conter multiplos testes:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/iWZgjKzyxhyAtvjpsyTTEpzs4pKot938aVjk" alt="Test"/></h1>
+
+Para realmente testar um componente React, vamos fazer algo um pouco mais útil agora. Por enquanto só temos o App, que não está fazendo nada muito útil. Primeiro, vamos configurar o ambiente com um pequeno aplicativo com mais funcionalidades: o aplicativo de contador que criamos anteriormente. Se você pulou, pode voltar e ler como a construímos, mas para uma referência mais fácil, adiciono-a aqui novamente.
+
+
+São apenas dois componentes: `App` e `Button`. Crie o arquivo `App.js`:
+
+```
+import React, { useState } from 'react'
+import Button from './Button'
+
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  const incrementCount = increment => {
+    setCount(count + increment)
+  }
+  
+  return (
+    <div>
+      <Button increment={1} onClickFunction={incrementCount} />
+      <Button increment={10} onClickFunction={incrementCount} />
+      <Button increment={100} onClickFunction={incrementCount} />
+      <Button increment={1000} onClickFunction={incrementCount} />
+      <span>{count}</span>
+    </div>
+  )
+}
+
+export default App
+```
+e o arquivo `Button`:
+
+```
+import React from 'react'
+
+const Button = ({ increment, onClickFunction }) => {
+  const handleClick = () => {
+    onClickFunction(increment)
+  }
+  return <button onClick={handleClick}>+{increment}</button>
+}
+
+export default Button
+```
+
+Vamos usar a <kbg>react-testing-library</kbg>, que é uma grande ajuda, pois permite inspecionar a saída de cada componente e aplicar eventos a eles. Você pode ler mais sobre isso em https://github.com/kentcdodds/react-testing-library ou assistir a [este vídeo](https://www.youtube.com/watch?v=JKOwJUM4_RM).
+
+Vamos testar o componente <kbg>Button</kbg> primeiro.
+
+Começamos importando o <kbg>render</kbg> e o <kbg>fireEvent</kbg> da <kbg>react-testing-library</kbg>, dois <kbg>helpers</kbg>. O primeiro nos permite renderizar <kbg>JSX</kbg>. O segundo nos permite emitir eventos em um componente.
+
+Crie um <kbg>Button.test.js</kbg> e coloque-o na mesma pasta que o <kbg>Button.js</kbg>.
+
+```
+import React from 'react'
+import { render, fireEvent } from 'react-testing-library'
+import Button from './Button
+```
+
+Os Buttons são usados no aplicativo para aceitar um evento de clique e, em seguida, chamam uma função passada para a props onClickFunction. Adicionamos uma variável count e criamos uma função que a incrementa:
+
+```
+let count
+
+const incrementCount = increment => {
+  count += increment
+}
+```
+
+Depois, clicamos no botão e verificamos que a contagem passou de 0 a 1:
+
+```
+test('+1 Button works', () => {
+  count = 0
+  const { container } = render(
+    <Button increment={1} onClickFunction={incrementCount} />
+  )
+  const button = container.firstChild
+  expect(button.textContent).toBe('+1')
+  expect(count).toBe(0)
+  fireEvent.click(button)
+  expect(count).toBe(1)
+})
+```
+
+Vamos testar o componente App agora, que mostra 4 botões e o resultado na página. Podemos inspecionar cada botão e ver se o resultado aumenta quando clicamos neles, clicando também várias vezes:
+
+```
+import React from 'react'
+import { render, fireEvent } from 'react-testing-library'
+import App from './App'
+
+test('App works', () => {
+  const { container } = render(<App />)
+  console.log(container)
+  const buttons = container.querySelectorAll('button')
+  
+  expect(buttons[0].textContent).toBe('+1')
+  expect(buttons[1].textContent).toBe('+10')
+  expect(buttons[2].textContent).toBe('+100')
+  expect(buttons[3].textContent).toBe('+1000')
+  
+  const result = container.querySelector('span')
+  expect(result.textContent).toBe('0')
+  fireEvent.click(buttons[0])
+  expect(result.textContent).toBe('1')
+  fireEvent.click(buttons[1])
+  expect(result.textContent).toBe('11')
+  fireEvent.click(buttons[2])
+  expect(result.textContent).toBe('111')
+  fireEvent.click(buttons[3])
+  expect(result.textContent).toBe('1111')
+  fireEvent.click(buttons[2])
+  expect(result.textContent).toBe('1211')
+  fireEvent.click(buttons[1])
+  expect(result.textContent).toBe('1221')
+  fireEvent.click(buttons[0])
+  expect(result.textContent).toBe('1222')
+})
+```
