@@ -40,7 +40,7 @@ npm install --save-dev jest
 
 observe como instruímos ambos a colocar o Jest nas <kbg>devDependencies</kbg> do arquivo <kbg>package.json</kbg>, para que ele seja instalado apenas no ambiente de desenvolvimento e não na produção.
 
-Inclua esta linha na parte de scripts do seu arquivo <kbg>package.json</kbg>:
+Inclua esta linha na parte de scripts do seu arquivo `package.json`:
 
 ```
 {
@@ -49,7 +49,7 @@ Inclua esta linha na parte de scripts do seu arquivo <kbg>package.json</kbg>:
   }
 }
 ```
-então os testes podem ser executados rodando <kbg> npm run test</kbg> ou <kbg>yarn test</kbg>
+então os testes podem ser executados rodando ` npm run test` ou `yarn test`
 
 ### Criando o primeiro teste com o Jest
 
@@ -85,7 +85,7 @@ const div = (a, b) => a / b
 export default { sum, mul, sub, div }
 ```
 
-Agora crie um arquivo <kbg>math.test.js</kbg>, na mesma pasta, e usaremos o Jest para testar as funções definidas em <kbg>math.js</kbg>:
+Agora crie um arquivo `math.test.js`, na mesma pasta, e usaremos o Jest para testar as funções definidas em `math.js`:
 
 ```
 const { sum, mul, sub, div } = require('./math')
@@ -104,7 +104,7 @@ test('Dividing 1 / 1 equals 1', () => {
 })
 ```
 
-A execução de <kbg>npm run test</kbg> resulta no Jest sendo executado em todos os arquivos de teste encontrados e retornando o resultado final:
+A execução de `npm run test` resulta no Jest sendo executado em todos os arquivos de teste encontrados e retornando o resultado final:
 
 <h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/vGSvRogM-QF8N3EP5j9vUYYrkWvRc89OhE98" alt="Teste" /> </h1>
 
@@ -112,7 +112,7 @@ A execução de <kbg>npm run test</kbg> resulta no Jest sendo executado em todos
 
 O Visual Studio Code é um ótimo editor de texto para desenvolver em JavaScript. A extensão [Jest](O Visual Studio Code é um ótimo editor para desenvolvimento de JavaScript. A extensão Jest oferece uma integração de alto nível para nossos testes.
 
-Depois de instalá-lo, ele detectará automaticamente se você instalou o Jest em suas devDependencies e executará os testes. Você também pode chamar os testes manualmente, selecionando o comando <kbg>Jest: Start Runner</kbg>. Ele executará os testes e permanecerá no modo de exibição para executá-los novamente sempre que você alterar um dos arquivos que possuem um teste (ou um arquivo de teste):) oferece uma integração de alto nível para nossos testes.
+Depois de instalá-lo, ele detectará automaticamente se você instalou o Jest em suas devDependencies e executará os testes. Você também pode chamar os testes manualmente, selecionando o comando `Jest: Start Runner`. Ele executará os testes e permanecerá no modo de exibição para executá-los novamente sempre que você alterar um dos arquivos que possuem um teste (ou um arquivo de teste):) oferece uma integração de alto nível para nossos testes.
 
 Depois de instalá-lo, ele detectará automaticamente se você instalou o Jest em suas devDependencies e executará os testes. Você também pode chamar os testes manualmente, selecionando o comando Jest: Start Runner. Ele executará os testes e permanecerá no modo de exibição para executá-los novamente sempre que você alterar um dos arquivos que possuem um teste (ou um arquivo de teste):
 
@@ -120,16 +120,16 @@ Depois de instalá-lo, ele detectará automaticamente se você instalou o Jest e
 
 ### Matchers
 
-Nos exemplos anterior eu usei o <kbg>toBe()</kbg> como o único <kbg>matcher</kbg>:
+Nos exemplos anterior eu usei o `toBe()` como o único `matcher`:
 ```
 test('Adding 1 + 1 equals 2', () => {
   expect(sum(1, 1)).toBe(2)
 })
 ```
 
-Um <kbg>matcher</kbg> é um método que permite testar valores.
+Um `matcher` é um método que permite testar valores.
 
-Os <kbg>matchers</kbg> mais usados, comparando o valor do resultado de <kbg>expect()</kbg> com o valor passado como argumento, são:
+Os `matchers` mais usados, comparando o valor do resultado de `expect()` com o valor passado como argumento, são:
 
 - <kbg>toBe</kbg> compara a igualdade estrita, usando ===
 - <kbg>toEqual</kbg> compara os valores de duas variáveis. Se for um objeto ou matriz, verifica a igualdade de todas as propriedades ou elementos
@@ -150,7 +150,7 @@ Os <kbg>matchers</kbg> mais usados, comparando o valor do resultado de <kbg>expe
 - <kbg>toThrow</kbg> verifica se uma função aprovada gera uma exceção (em geral) ou uma exceção específica
 - <kbg>toBeInstanceOf()</kbg>: verifica se um objeto é uma instância de uma classe
 
-Todos esses matchers podem ser negados usando <kbg>.not.</kbg> dentro da instrução, por exemplo:
+Todos esses matchers podem ser negados usando `.not.` dentro da instrução, por exemplo:
 
 ```
 test('Adding 1 + 1 does not equal 3', () => {
@@ -281,7 +281,7 @@ test(`uppercase 'test' to equal 'TEST'`, () => {
   })
 })
 ```
-<h1 align="center> <img src="https://cdn-media-1.freecodecamp.org/images/8j7LKC8uKE5Tw0X4WN4Gm0rD3NziyPxNwyCn" alt="example" /> </h1>
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/8j7LKC8uKE5Tw0X4WN4Gm0rD3NziyPxNwyCn" alt="example" /> </h1>
                                                                                                                             
 Promises que são rejeitadas podem ser testadas usando `catch()`:
 
@@ -309,7 +309,7 @@ test(`uppercase 'test' to equal 'TEST'`, () => {
 })
 ```
 
-<h1 align="center> <img src="https://cdn-media-1.freecodecamp.org/images/F9HWCuZKWwG1RMZdNkDAaGMRsC0zaIsMokia" alt="example" /> </h1>
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/F9HWCuZKWwG1RMZdNkDAaGMRsC0zaIsMokia" alt="example" /> </h1>
 
 #### Async/Await
 
@@ -322,7 +322,7 @@ test(`uppercase 'test' to equal 'TEST'`, async () => {
   expect(str).toBe('TEST')
 })
 ```
-<h1 align="center> <img src="https://cdn-media-1.freecodecamp.org/images/7xWQMgM0PC9AGUBewAzcCgNWvHIjjxerfRxR" alt="example" /> </h1>
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/7xWQMgM0PC9AGUBewAzcCgNWvHIjjxerfRxR" alt="example" /> </h1>
 
 ### Mocking
 
@@ -490,15 +490,15 @@ const Button = ({ increment, onClickFunction }) => {
 export default Button
 ```
 
-Vamos usar a <kbg>react-testing-library</kbg>, que é uma grande ajuda, pois permite inspecionar a saída de cada componente e aplicar eventos a eles. Você pode ler mais sobre isso em https://github.com/kentcdodds/react-testing-library ou assistir a [este vídeo](https://www.youtube.com/watch?v=JKOwJUM4_RM).
+Vamos usar a `react-testing-library`, que é uma grande ajuda, pois permite inspecionar a saída de cada componente e aplicar eventos a eles. Você pode ler mais sobre isso em https://github.com/kentcdodds/react-testing-library ou assistir a [este vídeo](https://www.youtube.com/watch?v=JKOwJUM4_RM).
 
-Vamos testar o componente <kbg>Button</kbg> primeiro.
+Vamos testar o componente `Button` primeiro.
 
-Começamos importando o <kbg>render</kbg> e o <kbg>fireEvent</kbg> da <kbg>react-testing-library</kbg>, dois <kbg>helpers</kbg>. O primeiro nos permite renderizar <kbg>JSX</kbg>. O segundo nos permite emitir eventos em um componente.
+Começamos importando o `render` e o `fireEvent` da `react-testing-library`, dois `helpers`. O primeiro nos permite renderizar `JSX`. O segundo nos permite emitir eventos em um componente.
 
-Crie um <kbg>Button.test.js</kbg> e coloque-o na mesma pasta que o <kbg>Button.js</kbg>.
+Crie um `Button.test.js` e coloque-o na mesma pasta que o `Button.js`.
 
-```
+```"
 import React from 'react'
 import { render, fireEvent } from 'react-testing-library'
 import Button from './Button
