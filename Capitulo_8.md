@@ -235,3 +235,229 @@ const Post = ({post}) => (
 ```
 
 ## Redux
+
+> (Dica do tradutor(hehe): se não entenderem muito bem o Redux a partir desse livro, recomendo o blog da Rocketseat, só clicar [aqui](https://blog.rocketseat.com.br/redux-o-passo-a-passo/))
+
+O Redux é um gerenciador de estado que geralmente é usado junto com o React, mas não está vinculado a essa biblioteca - ele também pode ser usado com outras tecnologias.
+
+O Redux é uma maneira de gerenciar o estado de um aplicativo e movê-lo para um armazenamento global externo.
+
+Existem alguns conceitos a serem compreendidos, mas uma vez que você o faça, o Redux é uma abordagem muito simples para o problema.
+
+O Redux é muito popular nas aplicações React, mas não é exclusivo do React: existem ligações para praticamente qualquer estrutura popular. Dito isso, darei alguns exemplos usando o React, pois é seu principal caso de uso.
+
+### Quando você deve usar o Redux?
+
+O Redux é ideal para aplicativos de médio a grande porte, e você deve usá-lo apenas quando tiver problemas para gerenciar o estado com o gerenciamento padrão do React ou com a outra biblioteca usada.
+
+Aplicativos simples não devem precisar dele (e não há nada de errado com aplicativos simples).
+
+### Immutable State Tree (algo como Árvore de estado imutável)
+
+No Redux, todo o estado do aplicativo é representado por um objeto JavaScript, chamado State ou State Tree.
+
+Chamamos de Árvore de Estado Imutável porque é somente leitura: não pode ser alterada diretamente.
+
+Só pode ser alterado enviando uma `Action`.
+
+### Actions
+
+Uma `Action` é um objeto JavaScript que descreve uma alteração de maneira mínima (com apenas as informações necessárias):
+
+```
+{
+  type: 'CLICKED_SIDEBAR'
+}
+
+// exemplos com mais dados
+{
+  type: 'SELECTED_USER',
+  userId: 232
+}
+```
+
+O único requisito de uma `action` é ter uma propriedade `type`, cujo valor geralmente é uma string.
+
+### `Types` devem ser constantes
+
+Em uma aplicação simples o `type` pode ser definido como uma string, como eu fiz no exemplo anterior.
+
+Quando a aplicação cresce, é melhor usar constantes:
+```
+const ADD_ITEM = 'ADD_ITEM'
+const action = { type: ADD_ITEM, title: 'Third item' }
+```
+
+e separar ações em seus próprios arquivos e importá-los
+
+```
+import { ADD_ITEM, REMOVE_ITEM } from './actions'
+```
+
+### Actions Creators
+
+As `Actions Creators` são funções que criam `actions`.
+
+```
+function addItem(t) {
+  return {
+    type: ADD_ITEM,
+    title: t
+  }
+}
+```
+
+Você normalmente executa `actions creators` em combinação com o acionamento do `dispatcher`:
+```
+dispatch(addItem('Milk'))
+```
+ou definindo uma função `action dispatcher`:
+
+```
+const dispatchAddItem = i => dispatch(addItem(i))
+dispatchAddItem('Milk')
+```
+
+### Reducers
+
+Quando uma `action` é acionada, algo deve acontecer, o estado do aplicativo deve mudar.
+
+Este é o trabalho dos `reducers`.
+
+Um `reducer` é uma função pura que calcula a próxima Árvore de Estado com base na Árvore de Estado anterior e na `action dispatch()`.
+
+```
+;(currentState, action) => newState
+```
+
+Uma função pura recebe uma entrada e retorna uma saída, tudo isso sem alterar a entrada ou qualquer outra coisa. Assim, um `reducer` retorna um objeto de árvore de estado completamente novo que substitui o anterior.
+
+### O que um reducer não deve fazer
+
+Um `reducer` deve ser uma função pura, portanto deve:
+
+- nunca mudar seus argumentos
+- nunca mudar o estado, mas sim criar um novo com `Object.assign({}, ...)`
+- nunca gerar efeitos colaterais (nenhuma chamada de API muda nada)
+- nunca chamar funções não puras, funções que alteram sua saída com base em outros fatores além da entrada (por exemplo, `Date.now()` ou `Math.random()`)
+
+### Multiplos Reducers
+
+Como o estado de um aplicativo complexo pode ser realmente amplo, não há um único `reducer`, mas muitos `reducers` para qualquer tipo de ação.
+
+### Uma simulação de um reducer
+
+Em essência, o Redux pode ser simplificado com este modelo simples:
+
+#### O state (estado)
+
+```
+{
+  list: [
+    { title: "Primeiro item" },
+    { title: "Segundo item" },
+  ],
+  title: 'lista de compras'
+}
+```
+
+#### Uma lista de `actions`
+
+```
+{ type: 'ADD_ITEM', title: 'Terceiro items' }
+{ type: 'REMOVE_ITEM', index: 1 }
+{ type: 'CHANGE_LIST_TITLE', title: 'Lista de viagens' }
+```
+
+#### Um reducer para cada parte do state
+```
+const title = (state = '', action) => {
+    if (action.type === 'CHANGE_LIST_TITLE') {
+      return action.title
+    } else {
+      return state
+    }
+}
+
+const list = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_ITEM':
+      return state.concat([{ title: action.title }])
+    case 'REMOVE_ITEM':
+      return state.map((item, index) =>
+        action.index === index
+          ? { title: item.title }
+          : item
+    default:
+      return state
+  }
+}
+```
+
+#### Um reducer para todo o state
+
+```
+const listManager = (state = {}, action) => {
+  return {
+    title: title(state.title, action),
+    list: list(state.list, action)
+  }
+}
+```
+
+### O Store
+
+O `store` é um objeto que:
+
+- armazena o state do seu app
+- expõe o state via getState()
+- nos permite atualizar o state via dispatch()
+
+Um `store` é único no seu aplicativo.
+
+Aqui está como um `store` para o aplicativo listManager é criado:
+
+```
+import { createStore } from 'redux'
+import listManager from './reducers'
+let store = createStore(listManager)
+```
+
+### Posso inicializar o `store` com dados do servidor?
+
+Claro, apenas passe um state inicial:
+
+```
+let store = createStore(listManager, preexistingState)
+```
+
+### Pegando o state
+
+```
+store.getState()
+```
+
+### Atualize o state
+```
+store.dispatch(addItem('Something'))
+```
+
+### 'Ouça' mudanças no state
+
+```
+const unsubscribe = store.subscribe(() =>
+  const newState = store.getState()
+)
+
+unsubscribe()
+```
+
+### Fluxo de dados
+
+O fluxo de dados no Redux é sempre unidirecional.
+
+Você chama o `dispatch()` no `Store`, passando uma `Action`.
+
+O `store` se encarrega de enviar a `action` ao Reducer, gerando o proximo `state`.
+
+O `store` atualiza o state e avisa todos os `listeners`.
