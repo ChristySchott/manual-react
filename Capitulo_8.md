@@ -461,3 +461,13 @@ Você chama o `dispatch()` no `Store`, passando uma `Action`.
 O `store` se encarrega de enviar a `action` ao Reducer, gerando o proximo `state`.
 
 O `store` atualiza o state e avisa todos os `listeners`.
+
+## Next.js
+
+Trabalhar em um aplicativo JavaScript desenvolvido pelo React é incrível, mas ainda assim existem alguns problemas relacionados à renderização de todo o conteúdo no lado do cliente.
+
+Primeiro, a página leva mais tempo para se tornar visível para o usuário, porque antes do carregamento do conteúdo, todo o JavaScript deve ser carregado e seu aplicativo precisa ser executado para determinar o que mostrar na página.
+
+Segundo, se você estiver criando um site disponível publicamente, terá um problema de SEO de conteúdo. Os mecanismos de pesquisa estão melhorando a execução e a indexação de aplicativos JavaScript, mas é muito melhor podermos enviar conteúdo a eles, em vez de deixá-los descobrir.
+
+A solução para esses dois problemas é a renderização do servidor(server rendering), também chamada de pré-renderização estática.
