@@ -471,3 +471,103 @@ Primeiro, a página leva mais tempo para se tornar visível para o usuário, por
 Segundo, se você estiver criando um site disponível publicamente, terá um problema de SEO de conteúdo. Os mecanismos de pesquisa estão melhorando a execução e a indexação de aplicativos JavaScript, mas é muito melhor podermos enviar conteúdo a eles, em vez de deixá-los descobrir.
 
 A solução para esses dois problemas é a renderização do servidor(server rendering), também chamada de pré-renderização estática.
+
+O Next.js é um framework do React para fazer tudo isso de uma maneira muito simples, mas não se limita a isso. Ele é anunciado por seus criadores como uma cadeia de ferramentas de comando único e configuração zero para aplicativos React.
+
+Ele fornece uma estrutura comum que permite a fácil criação do frontend de um aplicativo React e o processamento transparente do lado do servidor para você.
+
+Aqui está uma lista dos principais recursos do Next.js.
+
+- `Hot Code Reloading`: Next.js recarrega a página quando detecta qualquer alteração salva no disco.
+- `Automatic Routing`: qualquer URL é mapeado para o sistema de arquivos e você não precisa de nenhuma configuração (é claro que você tem opções de personalização).
+- `Single File Components`: usando o styled-jsx, completamente integrado, é trivial adicionar estilos com escopo ao componente.
+- `Server Rendering`: você pode (opcionalmente) renderizar os componentes do React no lado do servidor, antes de enviar o HTML para o cliente.
+- `Ecosystem Compatibility`: Next.js roda bem com o restante do ecossistema JavaScript, Node e React.
+- `Automatic Code Splitting`: as páginas são renderizadas apenas com as bibliotecas e JavaScript de que precisam, e não mais.
+- `Dynamic Components`: você pode importar módulos JavaScript e React Components dinamicamente.
+- `Static Exports`: usando o comando `next export`, o Next.js permite exportar um site totalmente estático do seu aplicativo.
+
+
+### Instalação
+
+O Next.js suporta todas as principais plataformas: Linux, macOS, Windows.
+
+Um projeto Next.js é iniciado facilmente com o npm:
+```
+npm install next react react-dom
+```
+
+ou com o yarn:
+```
+yarn add next react react-dom
+```
+
+### Iniciando 
+
+Crie um `package.json` com este conteúdo:
+```
+{
+  "scripts": {
+    "dev": "next"
+  }
+}
+```
+
+Agora, se você executar esse comando:
+```
+npm run dev
+```
+
+o script gerará um erro reclamando por não encontrar o arquivo `pages`. Essa é a única coisa que o Next.js requer para executar.
+
+Crie um arquivo `pages` vazio e execute o comando novamente, e o Next.js iniciará um servidor no localhost: 3000.
+
+Se você acessar esse URL agora, será recebido por uma página 404 amigável, com um design bom e limpo
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/wBBqzsveZC9evvtqiPb6yrFav9V5UjExd0HE" alt="404 not found page" /> </h1>
+
+O Next.js também lida com outros tipos de erro, como o erro `500`, por exemplo.
+
+### Criando uma página
+
+Na pasta `pages`, crie um arquivo `index.js` com um simples componente funcional do React:
+```
+export default () => (
+  <div>
+    <p>Hello World!</p>
+  </div>
+)
+```
+
+Se você visitar localhost: 3000, esse componente será renderizado automaticamente.
+
+Por que isso é tão simples?
+
+O Next.js usa uma estrutura de páginas declarativa, baseada na estrutura do sistema de arquivos.
+
+Simplificando, as páginas estão dentro de uma pasta de páginas e o URL da página é determinado pelo nome do arquivo da página. O sistema de arquivos é a API das páginas.
+
+### Renderização no lado do servidor
+
+Abra a fonte da página, `View -> Developer -> View Source` com o Chrome.
+
+Como você pode ver, o HTML gerado pelo componente é enviado diretamente na fonte da página. Não é renderizado no lado do cliente, mas é renderizado no servidor.
+
+A equipe do Next.js. queria criar uma experiência de desenvolvedor para páginas renderizadas pelo servidor semelhantes à que você obtém ao criar um projeto PHP básico, onde você simplesmente solta arquivos PHP e os chama, e eles aparecem como páginas. Internamente, é claro que tudo é muito diferente, mas a facilidade de uso é clara.
+
+### Adicionando uma segunda página
+
+Vamos criar outra página, em `pages/contact.js`
+```
+export default () => (
+  <div>
+    <p>
+      <a href="mailto:my@email.com">Contact us!</a>
+    </p>
+  </div>
+)
+```
+
+Se você direcionar o navegador para `localhost:3000/contact`, esta página será renderizada, novamente, pelo servidor.
+
+
