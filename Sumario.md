@@ -77,4 +77,3 @@
 - Next.js
 - Gatsby
 
-- Empacotando
