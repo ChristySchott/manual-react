@@ -570,4 +570,241 @@ export default () => (
 
 Se você direcionar o navegador para `localhost:3000/contact`, esta página será renderizada, novamente, pelo servidor.
 
+### Renderização no lado do cliente
 
+A renderização do servidor é muito conveniente no carregamento da primeira página, por todos os motivos citados acima, mas quando se trata de navegar no site, a renderização do lado do cliente é essencial para acelerar o carregamento da página e melhorar a experiência do usuário.
+
+O Next.js fornece um componente `Link` que você pode usar para criar links. Tente vincular as duas páginas acima.
+
+Altere `index.js` para este código:
+
+```
+import Link from 'next/link'
+
+export default () => (
+  <div>
+    <p>Hello World!</p>
+    <Link href="/contact">
+      <a>Contact me!</a>
+    </Link>
+  </div>
+)
+```
+Agora volte ao navegador e tente este link. Como você pode ver, a página Contato é carregada imediatamente, sem uma atualização da página.
+
+Essa navegação do lado do cliente está funcionando corretamente, com suporte completo à History API, o que significa que o botão voltar dos usuários não será interrompido.
+
+Se você clicar com o botão direito do mouse no link, a mesma página de Contato será aberta em uma nova guia, agora renderizada pelo servidor.
+
+### Páginas dinâmicas
+
+Um bom caso de uso para o Next.js. é um blog, pois é algo que todos os desenvolvedores sabem como funciona e é um bom exemplo de como lidar com páginas dinâmicas.
+
+Uma página dinâmica é uma página que não possui conteúdo fixo, mas exibe alguns dados com base em alguns parâmetros.
+
+Altere `index.js` para
+
+```
+import Link from 'next/link'
+
+const Post = props => (
+  <li>
+    <Link href={`/post?title=${props.title}`}>
+      <a>{props.title}</a>
+    </Link>
+  </li>
+)
+
+export default () => (
+  <div>
+    <h2>My blog</h2>
+    <ul>
+      <li>
+        <Post title="Yet another post" />
+        <Post title="Second post" />
+        <Post title="Hello, world!" />
+      </li>
+    </ul>
+  </div>
+)
+```
+
+Isso criará uma série de postagens e preencherá o parâmetro de consulta de título com o título da postagem:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/nEBXVSebNz6KzUWgNg62w-clo2vL7tnLIYpl"/> </h1>
+
+Agora crie um arquivo `post.js` na pasta `pages` e adicione:
+
+```
+export default props => <h1>{props.url.query.title}</h1>
+```
+
+Agora, clicar em uma única postagem renderizará o título da postagem em uma tag `h1`:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/urgIpOydqbjE4i9nyELblMonOjrK0Plrn3OJ"/> </h1>
+
+Você pode usar URLs limpos sem parâmetros de consulta. O componente de link Next.js nos ajuda ao aceitar um atributo `as`, que você pode usar para passar um slug:
+
+```
+import Link from 'next/link'
+
+const Post = props => (
+  <li>
+    <Link as={`/${props.slug}`} href={`/post?title=${props.title}`}>
+      <a>{props.title}</a>
+    </Link>
+  </li>
+)
+
+export default () => (
+  <div>
+    <h2>My blog</h2>
+    <ul>
+      <li>
+        <Post slug="yet-another-post" title="Yet another post" />
+        <Post slug="second-post" title="Second post" />
+        <Post slug="hello-world" title="Hello, world!" />
+      </li>
+    </ul>
+  </div>
+)
+```
+
+
+### CSS-in-JS
+
+
+O Next.js por padrão fornece suporte para styled-jsx, que é uma solução CSS-in-JS fornecida pela mesma equipe de desenvolvimento, mas você pode usar a biblioteca que preferir, como Styled Components.
+
+Exemplo:
+
+```
+export default () => (
+  <div>
+    <p>
+      <a href="mailto:my@email.com">Contact us!</a>
+    </p>
+    <style jsx>{`
+      p {
+        font-family: 'Courier New';
+      }
+      a {
+        text-decoration: none;
+        color: black;
+      }
+      a:hover {
+        opacity: 0.8;
+      }
+    `}</style>
+  </div>
+)
+```
+
+Os estilos são 'escopados' ao componente, mas você também pode editar estilos globalmente, adicionando `global` ao estilo do elemento:
+
+```
+export default () => (
+  <div>
+    <p>
+      <a href="mailto:my@email.com">Contact us!</a>
+    </p>
+    <style jsx global>{`
+      body {
+        font-family: 'Benton Sans', 'Helvetica Neue';
+        margin: 2em;
+      }
+      h2 {
+        font-style: italic;
+        color: #373fff;
+      }
+    `}</style>
+  </div>
+)
+```
+
+### Exportando um site estático
+
+Uma aplicação com Next.js pode ser facilmente exportada como um site estático, que pode receber um deploy em um dos sites de hosts mais rápidos, como `Netlify` ou `Firebase Hosting`, sem a necessidade de configurar um ambiente no Node.
+
+O processo requer que você declare as URLs que compõem o site, mas é um processo simples.
+
+### Deploy 
+
+É fácil criar uma cópia pronta para produção do aplicativo, sem mapas de origem ou outras ferramentas de desenvolvimento que não são necessárias na compilação final.
+
+No início deste tutorial, você criou um arquivo `package.json` com este conteúdo:
+
+```
+{
+  "scripts": {
+    "dev": "next"
+  }
+}
+```
+which was the way to start up a development server using npm run dev.
+
+que é a maneira de startar um servidor de desenvolvimento usando `npm run dev`.
+
+Agora basta adicionar o seguinte conteúdo ao `package.json`:
+
+```
+{
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  }
+}
+```
+
+e prepare seu app rodando `npm run build` e `npm run start`.
+
+### Now
+
+A companhia por trás do Next.js provém um serviço muito bom de hosting para aplicação em Node.js, chamado `Now`.
+
+É claro que eles integram os dois produtos para que você possa implantar aplicativos `Next.js` sem muitos problemas, depois de instalar o `Now`, executando o comando `now` na pasta do aplicativo.
+
+Nos bastidores do `Now`, configure um servidor para você e você não precisará se preocupar com nada, apenas aguardar o URL do aplicativo estar pronto.
+
+### Zones
+
+Você pode configurar várias instâncias do Next.js. para ouvir diferentes URLs. No entanto, o aplicativo para um usuário externo parecerá estar sendo desenvolvido por um único servidor:
+
+https://github.com/zeit/next.js/#multi-zones
+
+### Plugins 
+
+Next.js tem uma lista de plugins em https://github.com/zeit/next-plugins
+
+## Gatsby
+
+Gatsby é uma plataforma para a criação de aplicativos e sites usando o React.
+
+É uma das ferramentas que permitem a criação de um conjunto de tecnologias e práticas conhecidas coletivamente como JAMstack.
+
+Gatsby é uma das coisas mais legais na área do Desenvolvimento Frontend no momento. Por quê? Eu acho que as razões são:
+
+- a explosão da abordagem JAMstack na criação de aplicativos e sites
+- a rápida adoção da tecnologia Progressive Web Apps no setor, que é um dos principais recursos do Gatsby
+- é construído no React e no GraphQL, que são duas tecnologias muito populares e em ascensão
+- é realmente poderoso
+- é rápido
+- a documentação é ótima
+- o efeito de rede (as pessoas o usam, criam sites, fazem tutoriais, as pessoas sabem mais sobre isso, criando um ciclo)
+- tudo é JavaScript (não é necessário aprender uma nova linguagem de modelos)
+- esconde a complexidade, no começo, mas nos permite acessar todas as etapas para personalizar
+
+Todos esses são ótimos pontos, e Gatsby definitivamente vale a pena dar uma olhada.
+
+### Como o Gatsby funciona?
+
+Com o Gatsby, seus aplicativos são criados usando componentes React.
+
+O conteúdo que você renderiza em um site geralmente é escrito usando o Markdown, mas você pode usar qualquer tipo de fonte de dados, como um headless CMS ou um serviço da Web como o Contentful.
+
+O Gatsby cria o site e é compilado em HTML estático, que pode ser implantado em qualquer servidor da Web que você desejar, como Netlify, AWS S3, GitHub Pages, provedores de hospedagem regulares, PAAS e muito mais. Tudo o que você precisa é de um local que sirva páginas HTTP simples e seus ativos ao cliente.
+
+Mencionei Progressive Web Apps na lista. O Gatsby gera automaticamente seu site como um PWA, com um service worker que acelera o carregamento da página e o cache de recursos.
+
+Você pode aprimorar a funcionalidade do Gatsby através de plugins.
