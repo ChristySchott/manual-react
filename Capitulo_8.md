@@ -808,3 +808,139 @@ O Gatsby cria o site e é compilado em HTML estático, que pode ser implantado e
 Mencionei Progressive Web Apps na lista. O Gatsby gera automaticamente seu site como um PWA, com um service worker que acelera o carregamento da página e o cache de recursos.
 
 Você pode aprimorar a funcionalidade do Gatsby através de plugins.
+
+### Instalação
+
+Você pode instalar o Gatsby rodando o seguinte comando no terminal:
+
+```
+npm install -g gatsby-cli
+```
+
+Você cria um novo site de Hello World rodando
+
+```
+gatsby new mysite https://github.com/gatsbyjs/gatsby-starter-hello-world
+```
+
+Este comando cria um novo site do Gatsby na pasta mysite, usando o starter disponível em https://github.com/gatsbyjs/gatsby-starter-hello-world.
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/rNWB5DuHCS526rLjNuhwMdYAErq4TTAJFqg5" alt="Gatsby run" /> </h1>
+
+Um starter é um site de exemplo no qual você pode construir em cima. Outro starter comum é o padrão(default), disponível em https://github.com/gatsbyjs/gatsby-starter-default.
+
+> [Aqui você pode encontrar uma lista de todas as entradas.](https://www.gatsbyjs.org/starters/)
+
+### Rodando o site Gatsby
+
+Depois que o terminal terminar de instalar o starter, você poderá executar o site chamando
+
+```
+cd mysite
+gatsby develop
+```
+
+que iniciará um novo servidor Web e servirá o site na porta 8000 do localhost.
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/tThFtYg35ax6YBnuLS9z4y92JYUhdxJZaBaj" alt="Gatsby run on port 8000" /> </h1>
+
+E aqui está o nosso Hello World em ação:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/i-aQLpALPcniL3pkUylOWeoqYCKvnzDHX8Sx" alt="Gatsby run on port 8000" /> </h1>
+
+### Inspecionando o site
+
+Se você abrir o site criado com seu editor de código favorito (eu uso o VS Code), você encontrará três pastas:
+
+- `.cache`, uma pasta oculta que contém os componentes internos do Gatsby, nada que você deva mudar agora
+- `public`, que contém o site resultante depois que você o cria
+- `src` contém os componentes React, neste caso apenas o componente do `índex`
+- `static` que conterá os recursos estáticos, como CSS e imagens
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/x5XH1s5uMEQdUfnZB6BM2-T9HXkDwv1xLhPd" alt="Arquitetura do Gatsby" /> </h1>
+
+Agora, é fácil fazer uma alteração simples na página padrão, basta abrir `src/pages/index.js` e alterar “Hello world!” para outra coisa e salve. O navegador deve recarregar instantaneamente o componente a quente (o que significa que a página não é atualizada de fato, mas o conteúdo é alterado - um truque possibilitado pela tecnologia subjacente).
+
+Para adicionar uma segunda página, basta criar outro arquivo `.js` nesta pasta, com o mesmo conteúdo de `index.js` (ajustar o conteúdo) e salvá-lo.
+
+Por exemplo, eu criei um arquivo `second.js` com este conteúdo:
+
+```
+import React from 'react'
+
+export default () => <div>Second page!</div>
+```
+
+e abri o navegador em http://localhost:8000/second:
+
+<h1 align="center"> <img src="https://cdn-media-1.freecodecamp.org/images/g4uWZNxitB4AAVbqOFmCKKPugS7yrxKYH-ld" alt="Segunda página do Gatsby" /> </h1>
+
+### Linkando as páginas
+
+Você pode vincular essas páginas importando um componente React fornecido pelo Gatsby, chamado `Link`:
+```
+import { Link } from "gatsby"
+
+```
+e usando isso em seu componente JSX:
+
+```
+<Link to="/second/">Second&lt;/Link>
+```
+
+### Adicionando CSS
+
+Você pode importar qualquer arquivo CSS usando a importação do JavaScript:
+
+```
+import './index.css'
+```
+
+Você pode usar a estilização do React:
+
+```
+<p style={{
+    margin: '0 auto',
+    padding: '20px'
+  }}>Hello world</p>
+```
+
+### Usando plugins
+
+O Gatsby fornece muitas coisas prontas para uso, mas algumas outras funcionalidades são fornecidas por [plugins](https://www.gatsbyjs.org/plugins/).
+
+Existem 3 tipos de plugins:
+
+- `source plugins` buscam dados de uma fonte. Criam nós que podem ser filtrados pelos `transformers plugins`
+- `transformer plugins` transformam os dados providos pelos `source plugins` em algo que o Gatsby pode utilizar
+- `functional plugins` implementam alguma funcionalidade, como adicionar suporte a mapas ou mais
+
+Alguns dos plugins mais usados são:
+
+- `gatsby-plugin-react-helmet` que permite editar o conteúdo da tag `head`
+- `gatsby-plugin-catch-links` que usa a History API para prevenir o navegador de reiniciar a páginas, carregando o novo conteúdo utilizando AJAX
+
+Um plug-in Gatsby é instalado em 2 etapas. Primeiro você o instala usando o npm e depois o adiciona à configuração do Gatsby em gatsby-config.js.
+
+Por exemplo, você pode instalar o plug-in Catch Links:
+```
+npm install gatsby-plugin-catch-links
+```
+
+No `gatsby-config.js` (crie-o, se não houver, na pasta raiz do site), adicione o plug-in ao array exportado de `plug-ins`:
+
+```
+module.exports = {
+  plugins: ['gatsby-plugin-catch-links']
+}
+```
+
+É isso, o plugin agora irá fazer o seu trabalho.
+
+### Deploy
+
+Depois de criar o site usando o `gatsby build`, tudo o que você precisa fazer é implantar o resultado contido na pasta `public`.
+
+Dependendo da solução que você escolher, você precisará de etapas diferentes aqui, mas geralmente enviará para um repositório Git e permitirá que os  Git post-commit hooks façam o trabalho de implantação. [Aqui estão alguns ótimos guias para algumas plataformas de hospedagem populares](https://www.gatsbyjs.org/docs/deploying-and-hosting/) nas quais você pode implantar o Gatsby.
+
+
