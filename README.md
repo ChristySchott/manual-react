@@ -1,6 +1,5 @@
 <h1 align="center"> :green_book:  Manual do React  :ledger: </h1>
 
-<h3 align="center"> :warning:  Em construção  :warning: </h3>
 
 Vale a pena dizer que tive conhecimento da existência do livro durante um curso de React na plataforma da [freeCodeCamp](https://www.freecodecamp.org/learn/). Os cursos são em inglês, mas são realmente muito completos e no final você ainda ganha um certificação.
 
